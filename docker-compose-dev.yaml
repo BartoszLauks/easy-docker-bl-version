@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  appName-mysql:
+    container_name: appName-mysql-dev
+    ports:
+      - '33063:3306'
+
+  appName-php:
+    container_name: appName-php-dev
+    environment:
+      APP_ENV: dev
+      APP_VERSION: dev
+      DATABASE_URL: mysql://root:@appName-mysql:3306/appName_dev
+
+  appName-nginx:
+    container_name: appName-nginx-dev
+    ports:
+      - '8083:80'

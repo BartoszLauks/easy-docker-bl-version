@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  appName-mysql:
+    image: mysql:5.7
+    command: --sql_mode=""
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+    volumes:
+      - appName_db_data:/var/lib/mysql
+
+  appName-php:
+    build: docker/php-fpm
+    working_dir: /app
+#    environment:
+#      JWT_PASSPHRASE: 1234
+    volumes:
+      - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini:ro
+      - .:/app:cached
+    depends_on:
+      - appName-mysql
+
+  appName-nginx:
+    image: nginx:latest
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - .:/app:cached
+    depends_on:
+      - appName-php
+
+volumes:
+  appName_db_data:

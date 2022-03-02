@@ -1,0 +1,32 @@
+version: '3.7'
+
+services:
+  appName-mysql:
+    container_name: appName-mysql-dev-local
+    ports:
+      - '33060:3306'
+  appName-php:
+    container_name: appName-php-dev-local
+    ports:
+      - '2222:22'
+    volumes:
+      - appName-api-vendor-sync:/app/vendor
+      - appName-api-app-sync:/app
+    environment:
+      APP_ENV: dev
+      APP_VERSION: dev
+      DATABASE_URL: mysql://root:@appName-mysql:3306/appName
+
+  appName-nginx:
+    container_name: appName-nginx-dev-local
+    ports:
+      - '9090:80'
+    volumes:
+      - appName-api-vendor-sync:/app/vendor
+      - appName-api-app-sync:/app
+
+volumes:
+  appName-api-vendor-sync:
+    external: true
+  appName-api-app-sync:
+    external: true
