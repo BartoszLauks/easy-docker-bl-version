@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   appName-mysql:
-    image: mysql:5.7
+    image: mariadb:10.6.10
     command: --sql_mode=""
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -12,8 +12,6 @@ services:
   appName-php:
     build: docker/php-fpm
     working_dir: /app
-#    environment:
-#      JWT_PASSPHRASE: 1234
     volumes:
       - ./docker/php-fpm/php.ini:/usr/local/etc/php/php.ini:ro
       - .:/app:cached
