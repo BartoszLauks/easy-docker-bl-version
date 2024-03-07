@@ -4,42 +4,42 @@ install:
 	sh ./install.sh
 
 migrate:
-	docker-compose exec -T appName-php php bin/console doctrine:migrations:diff --no-interaction
-	docker-compose exec -T appName-php php bin/console doctrine:migrations:migrate --no-interaction
+	docker composeexec -T appName-php php bin/console doctrine:migrations:diff --no-interaction
+	docker composeexec -T appName-php php bin/console doctrine:migrations:migrate --no-interaction
 
 diff_migrations:
-	docker-compose exec -T appName-php php bin/console doctrine:migrations:diff --no-interaction
+	docker composeexec -T appName-php php bin/console doctrine:migrations:diff --no-interaction
 
 migrations:
-	docker-compose exec -T appName-php php bin/console doctrine:migrations:migrate --no-interaction
+	docker composeexec -T appName-php php bin/console doctrine:migrations:migrate --no-interaction
 
 composer_install:
-	COMPOSER_ALLOW_SUPERUSER=1 docker-compose exec -T appName-php composer self-update
-	COMPOSER_ALLOW_SUPERUSER=1 docker-compose exec -T appName-php composer install --no-interaction --classmap-authoritative --optimize-autoloader
+	COMPOSER_ALLOW_SUPERUSER=1 docker composeexec -T appName-php composer self-update
+	COMPOSER_ALLOW_SUPERUSER=1 docker composeexec -T appName-php composer install --no-interaction --classmap-authoritative --optimize-autoloader
 
 composer_update:
-	COMPOSER_ALLOW_SUPERUSER=1 docker-compose exec -T appName-php composer self-update
-	COMPOSER_ALLOW_SUPERUSER=1 docker-compose exec -T appName-php composer update --no-interaction --classmap-authoritative --optimize-autoloader
+	COMPOSER_ALLOW_SUPERUSER=1 docker composeexec -T appName-php composer self-update
+	COMPOSER_ALLOW_SUPERUSER=1 docker composeexec -T appName-php composer update --no-interaction --classmap-authoritative --optimize-autoloader
 
 build_dev_local:
-	docker-compose -f docker-compose.yaml -f docker-compose-dev.local.yaml build
+	docker compose-f docker-compose.yaml -f docker-compose-dev.local.yaml build
 
 start_dev_local:
 ifeq ($(OS),Darwin)
 	docker volume create --name=appName-api-vendor-sync
 	docker volume create --name=appName-api-app-sync
-	docker-compose -f docker-compose.yaml -f docker-compose-dev.local.yaml up -d --remove-orphans
+	docker compose-f docker-compose.yaml -f docker-compose-dev.local.yaml up -d --remove-orphans
 	docker-sync start
 else
-	docker-compose up -d
+	docker composeup -d
 endif
 
 stop_dev_local:
 ifeq ($(OS),Darwin)
-	docker-compose stop
+	docker composestop
 	docker-sync stop
 else
-	docker-compose stop
+	docker composestop
 endif
 
 sync_clean:
@@ -48,28 +48,28 @@ ifeq ($(OS),Darwin)
 endif
 
 build_prod:
-	docker-compose -f docker-compose.yaml -f docker-compose-prod.yaml build
+	docker compose-f docker-compose.yaml -f docker-compose-prod.yaml build
 
 start_prod:
-	docker-compose -f docker-compose.yaml -f docker-compose-prod.yaml up -d
+	docker compose-f docker-compose.yaml -f docker-compose-prod.yaml up -d
 
 build_stage:
-	docker-compose -f docker-compose.yaml -f docker-compose-stage.yaml build
+	docker compose-f docker-compose.yaml -f docker-compose-stage.yaml build
 
 start_stage:
-	docker-compose -f docker-compose.yaml -f docker-compose-stage.yaml up -d
+	docker compose-f docker-compose.yaml -f docker-compose-stage.yaml up -d
 
 build_dev:
-	docker-compose -f docker-compose.yaml -f docker-compose-dev.yaml build
+	docker compose-f docker-compose.yaml -f docker-compose-dev.yaml build
 
 start_dev:
-	docker-compose -f docker-compose.yaml -f docker-compose-dev.yaml up -d
+	docker compose-f docker-compose.yaml -f docker-compose-dev.yaml up -d
 
 stop:
-	docker-compose down
+	docker composedown
 
 execphp:
-	docker-compose exec appName-php bash
+	docker composeexec appName-php bash
 
 execdb:
-	docker-compose exec appName-mysql bash
+	docker composeexec appName-mysql bash
