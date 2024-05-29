@@ -1,5 +1,3 @@
-version: '3.7'
-
 services:
   appName-mysql:
     container_name: appName-mysql-stage
