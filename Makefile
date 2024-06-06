@@ -36,10 +36,10 @@ endif
 
 stop_dev_local:
 ifeq ($(OS),Darwin)
-	docker composestop
+	docker compose stop
 	docker-sync stop
 else
-	docker composestop
+	docker compose stop
 endif
 
 sync_clean:
@@ -66,7 +66,7 @@ start_dev:
 	docker compose -f docker-compose.yaml -f docker-compose-dev.yaml up -d
 
 stop:
-	docker composedown
+	docker compose down
 
 execphp:
 	docker compose exec appName-php bash
