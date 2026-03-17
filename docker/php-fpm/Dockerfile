@@ -1,33 +1,21 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
-# Instalacja pakietów systemowych i PHP-owych zależności
-RUN apk update && apk add --no-cache \
-    $PHPIZE_DEPS \
-    bash \
-    git \
-    zip \
-    unzip \
-    tzdata \
-    zlib-dev \
-    libxml2-dev \
-    libzip-dev \
-    icu-dev \
- && rm -rf /var/cache/apk/*
+# System packages
+RUN apk add --no-cache $PHPIZE_DEPS bash git zip unzip icu-dev zlib-dev libzip-dev libxml2-dev tzdata
 
-# Instalacja rozszerzeń PHP
-RUN docker-php-ext-configure intl \
- && docker-php-ext-install pdo_mysql mysqli zip opcache intl \
- && docker-php-ext-enable opcache
+# PHP extensions
+RUN docker-php-ext-install pdo_mysql mysqli intl zip opcache
 
-# Instalacja Composera (jako root, jako user docker wywoła error)
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer
+# Composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Utworzenie użytkownika nie-rootowego
-RUN adduser -D -u 1000 docker && echo "docker:docker" | chpasswd
+# User
+RUN adduser -D -u 1000 docker
+WORKDIR /app
 
 # Konfiguracja środowiska pracy
 WORKDIR /app
-RUN git config --system --add safe.directory /app
+RUN git config --global --add safe.directory /app
 
 # Log i cron
 RUN touch /var/log/schedule.log && chmod 0777 /var/log/schedule.log
@@ -42,3 +30,4 @@ USER docker
 
 # Uruchomienie cron + php-fpm w tle
 CMD crond -b && php-fpm
+

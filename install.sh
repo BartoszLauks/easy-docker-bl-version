@@ -6,7 +6,7 @@ rm -Rf var/cache/*
 #mkdir ./config/jwt
 
 COMPOSER_ALLOW_SUPERUSER=1 docker compose exec -T appName-php composer self-update
-COMPOSER_ALLOW_SUPERUSER=1 docker compose exec -T appName-php composer update --no-interaction --classmap-authoritative --optimize-autoloader
+COMPOSER_ALLOW_SUPERUSER=1 docker compose exec -T appName-php composer install --no-interaction --classmap-authoritative --optimize-autoloader
 
 #First install ORM package
 #docker compose exec -T appName-php php bin/console doctrine:database:create --if-not-exists

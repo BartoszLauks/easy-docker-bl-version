@@ -21,6 +21,9 @@ composer_update:
 	COMPOSER_ALLOW_SUPERUSER=1 docker compose exec -T appName-php composer self-update
 	COMPOSER_ALLOW_SUPERUSER=1 docker compose exec -T appName-php composer update --no-interaction --classmap-authoritative --optimize-autoloader
 
+composer_autoload:
+	COMPOSER_ALLOW_SUPERUSER=1 docker compose exec -T appName-php composer dump-autoload
+
 build_dev_local:
 	docker compose -f docker-compose.yaml -f docker-compose-dev.local.yaml build
 
